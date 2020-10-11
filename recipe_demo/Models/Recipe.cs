@@ -26,10 +26,12 @@ namespace recipe_demo.Models
 
         public byte Photo_byte { get; set; }
 
-        [OneToMany]
+        // CascadeOperationsで関連データも同時に操作するか、どの操作を同時に操作するかを決められる
+        // https://bitbucket.org/twincoders/sqlite-net-extensions/src/master/SQLiteNetExtensions/Attributes/CascadeOperation.cs
+        [OneToMany(CascadeOperations =CascadeOperation.All)]
         public List<Item> Items { get; set; }
 
-        [OneToMany]
+        [OneToMany(CascadeOperations = CascadeOperation.All)]
         public List<Step> Steps { get; set; }
     }
 }
