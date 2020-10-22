@@ -9,12 +9,12 @@ namespace recipe_demo.Models
     public class Item
     {
         [PrimaryKey, AutoIncrement]
-        public int Item_id { get; set; }
+        public int ItemId { get; set; }
 
         [MaxLength(255)]
-        public string Item_Explanation { get; set; }
+        public string ItemExplanation { get; set; }
 
         [ForeignKey(typeof(Recipe))]
-        public int Recipe_Id { get; set; }
+        public int RecipeId { get; set; }
     }
 }

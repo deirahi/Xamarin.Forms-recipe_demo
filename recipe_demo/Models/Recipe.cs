@@ -22,9 +22,9 @@ namespace recipe_demo.Models
 
         //todo: 写真はあとで別のクラスに分けて、たくさん追加できるようにする。ひとまずは１つだけ。
         [MaxLength(255)]
-        public string Photo_filepath { get; set; }
+        public string PhotoFilepath { get; set; }
 
-        public byte Photo_byte { get; set; }
+        public byte PhotoByte { get; set; }
 
         // CascadeOperationsで関連データも同時に操作するか、どの操作を同時に操作するかを決められる
         // https://bitbucket.org/twincoders/sqlite-net-extensions/src/master/SQLiteNetExtensions/Attributes/CascadeOperation.cs

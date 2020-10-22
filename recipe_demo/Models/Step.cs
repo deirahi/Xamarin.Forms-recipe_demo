@@ -9,11 +9,13 @@ namespace recipe_demo.Models
     public class Step
     {
         [PrimaryKey , AutoIncrement]
-        public int Step_ID { get; set; }
+        public int StepID { get; set; }
 
-        public string Step_Details { get; set; }
+        public int StepOrder { get; set; }
+
+        public string StepDetails { get; set; }
 
         [ForeignKey(typeof(Recipe))]
-        public int Recipe_Id { get; set; }
+        public int RecipeId { get; set; }
     }
 }

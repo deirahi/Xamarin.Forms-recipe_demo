@@ -1,8 +1,48 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="recipe_demo.Views.MainView">
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Name="RecipesPage" x:Class="recipe_demo.Views.MainView">
     <ContentPage.Content>
-        <CollectionView>
-
-        </CollectionView>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <CollectionView x:Name="MyRecipes"
+                        ItemsSource="{Binding Recipes}"
+                        ItemsLayout="VerticalGrid, 2"
+                        Grid.Row="0"
+                        SelectionMode="Single"
+                        SelectedItem="{Binding vmSelectedRecipe}"
+                        SelectionChangedCommand="{Binding SelectRecipeCommand}" >
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid Padding="10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="80"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="80"/>
+                                <ColumnDefinition Width="80"/>
+                            </Grid.ColumnDefinitions>
+                            <Image Source="{Binding ImageUrl}"
+                               Aspect="AspectFill"
+                               HeightRequest="70"
+                               WidthRequest="70" />
+                            <Label Grid.Column="1"
+                               Text="{Binding RecipeName}"
+                               FontAttributes="Bold"
+                               LineBreakMode="TailTruncation" />
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+            <Button x:Name="RecipeAddButton"
+                    Command="{Binding Source={x:Reference RecipesPage}, Path=ViewModel.RecipeAddCommand}"
+                        CommandParameter="{Binding .}"
+                Grid.Row="0" Text="+" FontSize="Large"
+                    BorderColor="Black" BorderWidth="1" FontAttributes="Bold"
+                    BackgroundColor="OrangeRed" BorderRadius="35" TextColor="White"
+                    WidthRequest="70" HeightRequest="70" Margin="0,0,20,22"
+                    HorizontalOptions="End" VerticalOptions="End"/>
+        </Grid>
     </ContentPage.Content>
 </ContentPage>

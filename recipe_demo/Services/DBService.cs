@@ -25,9 +25,9 @@ namespace recipe_demo.Services
             return await dbConnection.Table<Recipe>().ToListAsync();
         }
 
-        public async Task<Recipe> GetRecipe(int recipe_id)
+        public async Task<Recipe> GetRecipe(int recipeId)
         {
-            return await dbConnection.GetWithChildrenAsync<Recipe>(recipe_id);
+            return await dbConnection.GetWithChildrenAsync<Recipe>(recipeId);
         }
 
         public async Task AddRecipe(Recipe recipe)
