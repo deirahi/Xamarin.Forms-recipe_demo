@@ -5,5 +5,6 @@ namespace recipe_demo.Services
     {
         public static string RecipeAdded = "AddRecipe";
         public static string RecipeUpdated = "UpdateRecipe";
+        public static string RecipeDeleted = "DeleteRecipe";
     }
 }

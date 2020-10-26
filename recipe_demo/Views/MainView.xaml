@@ -11,7 +11,7 @@
                         ItemsLayout="VerticalGrid, 2"
                         Grid.Row="0"
                         SelectionMode="Single"
-                        SelectedItem="{Binding vmSelectedRecipe}"
+                        SelectedItem="{Binding SelectedRecipe}"
                         SelectionChangedCommand="{Binding SelectRecipeCommand}" >
                 <CollectionView.ItemTemplate>
                     <DataTemplate>

@@ -6,7 +6,6 @@ using recipe_demo.Services;
 using Xamarin.Forms;
 using System.Linq;
 using recipe_demo.Models;
-
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
