@@ -1,12 +1,77 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="recipe_demo.Views.RecipeEntryView">
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Name="RecipeEntryPage" x:Class="recipe_demo.Views.RecipeEntryView">
     <ContentPage.Content>
         <Grid>
-            <ScrollView>
+            <ScrollView Grid.Row="0">
                 <StackLayout>
-
+                    <Label Text="Recipe About"/>
+                    <Entry Placeholder="Title" PlaceholderColor="Olive"
+                       Text="{Binding Path=Recipe.RecipeName}"/>
+                    <Editor Placeholder="Explanation" PlaceholderColor="Olive"
+                        Text="{Binding Path=Recipe.Explanation}"/>
+                    <Image x:Name="RecipeEyeCatch"
+                       Source="{Binding Path=Recipe.PhotoFilePath}"/>
+                    <Label Text="Recipe Items"/>
+                    <StackLayout x:Name="ItemsStack" HeightRequest="60">
+                        <CollectionView x:Name="EntriesItems" ItemsSource="{Binding Items}"  >
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Padding="10">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="30"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Entry Placeholder="Entry Item" Text="{Binding ItemExplanation}"
+                                />
+                                        <Button Grid.Column="1"
+                               Text="-"
+                               FontAttributes="Bold" Command="{Binding Source={x:Reference RecipeEntryPage}, Path=ViewModel.ItemDeleteCommand}" CommandParameter="{Binding .}" 
+                               />
+                                    </Grid>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </StackLayout>
+                    <Button Text="🖋" FontSize="Large"
+                            Command="{Binding ItemAddCommand}" />
+                    <Label Text="Recipe Steps"/>
+                    <CollectionView x:Name="EntriesSteps" ItemsSource="{Binding Steps}" >
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid Padding="10">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="30"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Entry Text="{Binding StepDetails}"
+                                />
+                                    <Button Grid.Column="1" Text="-"
+                               FontAttributes="Bold" Command="{Binding StepsDeleteCommand}" 
+                               />
+                                </Grid>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                    <Button Text="🆗" FontSize="Large" Command="{Binding StepsAddCommand}" />
                 </StackLayout>
             </ScrollView>
+            <Button x:Name="RecipeAddButton"
+                    Command="{Binding SaveCommand}"
+                        CommandParameter="{Binding .}"
+                Grid.Row="0" Text="+" FontSize="Large"
+                    BorderColor="Black" BorderWidth="1" FontAttributes="Bold"
+                    BackgroundColor="OrangeRed" BorderRadius="35" TextColor="White"
+                    WidthRequest="70" HeightRequest="70" Margin="0,0,20,22"
+                    HorizontalOptions="End" VerticalOptions="End"/>
+            <Button x:Name="RecipeDeleteButton"
+                    Command="{Binding DeleteCommand}"
+                        CommandParameter="{Binding .}"
+                Grid.Row="0" Text="🗑" FontSize="Large"
+                    BorderColor="Black" BorderWidth="1" FontAttributes="Bold"
+                    BackgroundColor="MediumPurple" BorderRadius="35" TextColor="White"
+                    WidthRequest="70" HeightRequest="70" Margin="20,0,0,22"
+                    HorizontalOptions="Start" VerticalOptions="End"/>
         </Grid>
     </ContentPage.Content>
 </ContentPage>

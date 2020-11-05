@@ -7,7 +7,6 @@ using Xamarin.Forms;
 using System.Linq;
 using recipe_demo.Models;
 using System.Threading.Tasks;
-using Xamarin.Forms;
 
 namespace recipe_demo.Services
 {

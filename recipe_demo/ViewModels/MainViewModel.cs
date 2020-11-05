@@ -18,9 +18,9 @@ namespace recipe_demo.ViewModels
 
         private bool vmIsDataLoaded;
 
-        //todo:ここのViewmodelがEntryでいいのかは調査・検証が必要
-        public ObservableCollection<RecipeEntryViewModel> Recipes { get; private set; }
-         = new ObservableCollection<RecipeEntryViewModel>();
+        //todo:ここのmodelがEntryでいいのかは調査・検証が必要
+        public ObservableCollection<RecipeEntryModel> Recipes { get; private set; }
+         = new ObservableCollection<RecipeEntryModel>();
 
         public RecipeDetailViewModel SelectedRecipe
         {
@@ -49,30 +49,37 @@ namespace recipe_demo.ViewModels
             MessagingCenter.Subscribe<RecipeEntryViewModel, Recipe>
                 (this, DbChangeEventMassages.RecipeUpdated, OnRecipeUpdated);
             //todo: DeleteのSubscribeが必要かを検証すること
+            MessagingCenter.Subscribe<RecipeEntryViewModel, Recipe>
+                (this, DbChangeEventMassages.RecipeDeleted, OnRecipeRemoved);
         }
 
         private void OnRecipeUpdated(RecipeEntryViewModel source, Recipe recipe)
         {
-            var recipeConcerned = Recipes.Single(r => r.RecipeId == recipe.RecipeId);
+            var recipeUpdated = Recipes.Single(r => r.EntryRecipeId == recipe.RecipeId);
 
-            recipeConcerned.RecipeId = recipe.RecipeId;
-            recipeConcerned.RecipeName = recipe.RecipeName;
-            recipeConcerned.Explanation = recipe.Explanation;
-            recipeConcerned.SetDate = recipe.SetDate;
-            recipeConcerned.PhotoFilepath = recipe.PhotoFilepath;
-            recipeConcerned.PhotoByte = recipe.PhotoByte;
-            recipeConcerned.Items = recipe.Items;
-            recipeConcerned.Steps = recipe.Steps;
+            recipeUpdated.EntryRecipeId = recipe.RecipeId;
+            recipeUpdated.RecipeName = recipe.RecipeName;
+            recipeUpdated.Explanation = recipe.Explanation;
+            recipeUpdated.PhotoFilepath = recipe.PhotoFilePath;
+            recipeUpdated.PhotoByte = recipe.PhotoByte;
+            recipeUpdated.Items = recipe.Items;
+            recipeUpdated.Steps = recipe.Steps;
         }
 
         private void OnRecipeAdded(RecipeEntryViewModel source, Recipe recipe)
         {
-            Recipes.Add(new RecipeEntryViewModel(recipe));
+            Recipes.Add(new RecipeEntryModel(recipe));
+        }
+
+        private void OnRecipeRemoved(RecipeEntryViewModel source, Recipe recipe)
+        {
+            Recipes.Remove(new RecipeEntryModel(recipe));
         }
 
         private async Task AddRecipe()
         {
-            await vmPageService.PushAsync(new RecipeEntryView(new RecipeEntryViewModel()));
+            var newRecipe = new Recipe();
+            await vmPageService.PushAsync(new RecipeEntryView(new RecipeEntryModel(newRecipe)));
         }
 
         private async Task SelectData(object recipe)
@@ -92,7 +99,7 @@ namespace recipe_demo.ViewModels
             var recipes = await vmDbService.GetRecipesAsync();
             foreach ( var recipe in recipes)
             {
-                Recipes.Add(new RecipeEntryViewModel(recipe));
+                Recipes.Add(new RecipeEntryModel(recipe));
             }
         }
     }

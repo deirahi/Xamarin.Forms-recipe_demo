@@ -22,7 +22,7 @@ namespace recipe_demo.Models
 
         //todo: 写真はあとで別のクラスに分けて、たくさん追加できるようにする。ひとまずは１つだけ。
         [MaxLength(255)]
-        public string PhotoFilepath { get; set; }
+        public string PhotoFilePath { get; set; }
 
         public byte PhotoByte { get; set; }
 

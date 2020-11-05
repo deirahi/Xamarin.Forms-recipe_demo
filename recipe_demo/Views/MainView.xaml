@@ -36,7 +36,7 @@
                 </CollectionView.ItemTemplate>
             </CollectionView>
             <Button x:Name="RecipeAddButton"
-                    Command="{Binding Source={x:Reference RecipesPage}, Path=ViewModel.RecipeAddCommand}"
+                    Command="{Binding AddRecipeCommand}"
                         CommandParameter="{Binding .}"
                 Grid.Row="0" Text="+" FontSize="Large"
                     BorderColor="Black" BorderWidth="1" FontAttributes="Bold"
