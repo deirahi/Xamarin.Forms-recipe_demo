@@ -7,59 +7,52 @@
                 <StackLayout>
                     <Label Text="Recipe About"/>
                     <Entry Placeholder="Title" PlaceholderColor="Olive"
-                       Text="{Binding Path=Recipe.RecipeName}"/>
-                    <Editor Placeholder="Explanation" PlaceholderColor="Olive"
-                        Text="{Binding Path=Recipe.Explanation}"/>
+                       Text="{Binding Path=recipe.RecipeName}" />
+                    <Editor Placeholder="Explanation" PlaceholderColor="Olive" HeightRequest="250"
+                        Text="{Binding Path=recipe.Explanation}"/>
                     <Image x:Name="RecipeEyeCatch"
-                       Source="{Binding Path=Recipe.PhotoFilePath}"/>
+                       Source="{Binding Path=recipe.PhotoFilePath}"/>
                     <Label Text="Recipe Items"/>
-                    <StackLayout x:Name="ItemsStack" HeightRequest="60">
-                        <CollectionView x:Name="EntriesItems" ItemsSource="{Binding Items}"  >
-                            <CollectionView.ItemTemplate>
-                                <DataTemplate>
-                                    <Grid Padding="10">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="30"/>
-                                        </Grid.ColumnDefinitions>
-                                        <Entry Placeholder="Entry Item" Text="{Binding ItemExplanation}"
-                                />
-                                        <Button Grid.Column="1"
-                               Text="-"
-                               FontAttributes="Bold" Command="{Binding Source={x:Reference RecipeEntryPage}, Path=ViewModel.ItemDeleteCommand}" CommandParameter="{Binding .}" 
-                               />
-                                    </Grid>
-                                </DataTemplate>
-                            </CollectionView.ItemTemplate>
-                        </CollectionView>
+                    <StackLayout x:Name="ItemsStack" BindableLayout.ItemsSource="{Binding Items}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate >
+                                <Grid >
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="40"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Entry Text="{Binding ItemExplanation}" Grid.Column="0" />
+                                    <Button Text="-" Grid.Column="1"
+                               FontAttributes="Bold" Command="{Binding Source={x:Reference Name=ItemsStack},  Path=BindingContext.ItemDeleteCommand}" CommandParameter="{Binding .}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
                     </StackLayout>
                     <Button Text="🖋" FontSize="Large"
                             Command="{Binding ItemAddCommand}" />
                     <Label Text="Recipe Steps"/>
-                    <CollectionView x:Name="EntriesSteps" ItemsSource="{Binding Steps}" >
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate>
-                                <Grid Padding="10">
+                    <StackLayout x:Name="StepsStack" BindableLayout.ItemsSource="{Binding Steps}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate >
+                                <Grid >
                                     <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="30"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="40"/>
                                     </Grid.ColumnDefinitions>
-                                    <Entry Text="{Binding StepDetails}"
-                                />
-                                    <Button Grid.Column="1" Text="-"
-                               FontAttributes="Bold" Command="{Binding StepsDeleteCommand}" 
-                               />
+                                    <Entry Text="{Binding StepDetails}" Grid.Column="0" />
+                                    <Button Text="-" Grid.Column="1"
+                               FontAttributes="Bold" Command="{Binding Source={x:Reference Name=StepsStack},  Path=BindingContext.StepDeleteCommand}" CommandParameter="{Binding .}"/>
                                 </Grid>
                             </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
-                    <Button Text="🆗" FontSize="Large" Command="{Binding StepsAddCommand}" />
+                        </BindableLayout.ItemTemplate>
+                    </StackLayout>
+                    <Button Text="🆕" FontSize="Large" Command="{Binding StepAddCommand}" />
                 </StackLayout>
             </ScrollView>
             <Button x:Name="RecipeAddButton"
                     Command="{Binding SaveCommand}"
                         CommandParameter="{Binding .}"
-                Grid.Row="0" Text="+" FontSize="Large"
+                Grid.Row="0" Text="📝" FontSize="Large"
                     BorderColor="Black" BorderWidth="1" FontAttributes="Bold"
                     BackgroundColor="OrangeRed" BorderRadius="35" TextColor="White"
                     WidthRequest="70" HeightRequest="70" Margin="0,0,20,22"

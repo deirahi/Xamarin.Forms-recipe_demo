@@ -12,7 +12,7 @@ namespace recipe_demo.ViewModels
 {
     public class RecipeEntryViewModel: BaseViewModel
     {
-        private Recipe recipe;
+        public Recipe recipe { get; private set; }
 
         public ObservableCollection<Item> Items { get; set; }
         public ObservableCollection<Step> Steps { get; set; }
@@ -22,6 +22,9 @@ namespace recipe_demo.ViewModels
 
         public ICommand ItemAddCommand { get; private set; }
         public ICommand ItemDeleteCommand { get; private set; }
+        public ICommand StepAddCommand { get; private set; }
+        public ICommand StepDeleteCommand { get; private set; }
+
         public ICommand SaveCommand { get; private set; }
         public ICommand DeleteCommand { get; private set; }
 
@@ -50,8 +53,8 @@ namespace recipe_demo.ViewModels
                 Steps = recipeEntryModel.Steps
             };
 
-            Items = recipeEntryModel.Items != null ? new ObservableCollection<Item> (recipe.Items) : new ObservableCollection<Item>();
-            Steps = recipeEntryModel.Items != null ? new ObservableCollection<Step> (recipe.Steps) : new ObservableCollection<Step>();
+            Items = recipeEntryModel.Items != null ? new ObservableCollection<Item>(recipe.Items) : new ObservableCollection<Item>();
+            Steps = recipeEntryModel.Items != null ? new ObservableCollection<Step>(recipe.Steps) : new ObservableCollection<Step>();
 
             if (Items.Count == 0)
             {
@@ -60,34 +63,38 @@ namespace recipe_demo.ViewModels
             if (Steps.Count == 0)
             {
             }
-            ItemAddCommand = new Command(() => ItemsAdd());
-            ItemDeleteCommand = new Command(i => ItemsDelete(i));
+            ItemAddCommand = new Command(() => ItemAdd());
+            ItemDeleteCommand = new Command(i => ItemDelete(i));
+
+            StepAddCommand = new Command(() => StepAdd());
+            StepDeleteCommand = new Command( s => StepDelete(s));
 
             SaveCommand = new Command(async () => await Save());
             DeleteCommand = new Command(async () => await Delete());
 
         }
 
-        public void ItemsAdd()
+        public void ItemAdd()
         {
 
             Items.Add( new Item());
         }
 
-        public void ItemsDelete(object sender) 
+        public void ItemDelete(object sender) 
         {
             var item = (Item)sender;
             Items.Remove(item);
         }
 
-        public void StepsAddCommand()
+        public void StepAdd()
         {
-            Steps.Insert(Steps.Count - 1, new Step());
+            Steps.Add(new Step() { StepOrder = Steps.Count});
         }
 
-        public void StepsDeleteCommand(object sender, EventArgs e)
+        public void StepDelete( object sender)
         {
             var step = (Step)sender;
+
             Steps.Remove(step);
         }
 
@@ -116,7 +123,7 @@ namespace recipe_demo.ViewModels
 
         async Task Save()
         {
-            if (String.IsNullOrWhiteSpace(recipe.RecipeName) )
+            if (String.IsNullOrEmpty(recipe.RecipeName) )
             {
                 await pageService.DisplayAlert("Error", "Please enter the name.", "OK");
                 return;
