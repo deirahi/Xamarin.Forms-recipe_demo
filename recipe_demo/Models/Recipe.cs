@@ -14,7 +14,7 @@ namespace recipe_demo.Models
         [MaxLength(255)]
         public string RecipeName { get; set; }
 
-        [MaxLength(255)]
+        [MaxLength(2000)]
         public string Explanation { get; set; }
 
         [MaxLength(255)]

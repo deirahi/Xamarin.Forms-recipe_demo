@@ -13,6 +13,10 @@
                         Text="{Binding Path=recipe.Explanation}"/>
                     <Image x:Name="RecipeEyeCatch"
                        Source="{Binding Path=recipe.PhotoFilePath}"/>
+                    <Button FontFamily="{DynamicResource MaterialFontFamily}"
+                        Text="&#xF087c;" FontSize="Large"
+                            Command="{Binding ItemAddCommand}"
+                            HorizontalOptions="Center" WidthRequest="100" Margin="0,0,0,30" />
                     <Label Text="Recipe Items"/>
                     <StackLayout x:Name="ItemsStack" BindableLayout.ItemsSource="{Binding Items}">
                         <BindableLayout.ItemTemplate>
@@ -29,8 +33,10 @@
                             </DataTemplate>
                         </BindableLayout.ItemTemplate>
                     </StackLayout>
-                    <Button Text="🖋" FontSize="Large"
-                            Command="{Binding ItemAddCommand}" />
+                    <Button FontFamily="{DynamicResource MaterialFontFamily}"
+                        Text="&#xF1528;" FontSize="Large"
+                            Command="{Binding ItemAddCommand}"
+                            HorizontalOptions="Center" WidthRequest="100" Margin="0,0,0,30" />
                     <Label Text="Recipe Steps"/>
                     <StackLayout x:Name="StepsStack" BindableLayout.ItemsSource="{Binding Steps}">
                         <BindableLayout.ItemTemplate>
@@ -47,7 +53,9 @@
                             </DataTemplate>
                         </BindableLayout.ItemTemplate>
                     </StackLayout>
-                    <Button Text="🆕" FontSize="Large" Command="{Binding StepAddCommand}" />
+                    <Button FontFamily="{DynamicResource MaterialFontFamily}"
+                        Text="&#xF1143;"  FontSize="Large" Command="{Binding StepAddCommand}"
+                            HorizontalOptions="Center" WidthRequest="100" Margin="0,0,0,30" />
                 </StackLayout>
             </ScrollView>
             <Button x:Name="RecipeAddButton"
@@ -56,7 +64,7 @@
                 Grid.Row="0" Text="📝" FontSize="Large"
                     BorderColor="Black" BorderWidth="1" FontAttributes="Bold"
                     BackgroundColor="OrangeRed" BorderRadius="35" TextColor="White"
-                    WidthRequest="70" HeightRequest="70" Margin="0,0,20,22"
+                    WidthRequest="55" HeightRequest="55" Margin="0,0,20,15"
                     HorizontalOptions="End" VerticalOptions="End"/>
             <Button x:Name="RecipeDeleteButton"
                     Command="{Binding DeleteCommand}"
@@ -64,7 +72,7 @@
                 Grid.Row="0" Text="🗑" FontSize="Large"
                     BorderColor="Black" BorderWidth="1" FontAttributes="Bold"
                     BackgroundColor="MediumPurple" BorderRadius="35" TextColor="White"
-                    WidthRequest="70" HeightRequest="70" Margin="20,0,0,22"
+                    WidthRequest="55" HeightRequest="55" Margin="20,0,0,15"
                     HorizontalOptions="Start" VerticalOptions="End"/>
         </Grid>
     </ContentPage.Content>
