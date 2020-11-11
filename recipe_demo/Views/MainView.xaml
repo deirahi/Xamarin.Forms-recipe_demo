@@ -24,7 +24,7 @@
                                 <ColumnDefinition Width="80"/>
                                 <ColumnDefinition Width="80"/>
                             </Grid.ColumnDefinitions>
-                            <Image Source="{Binding ImageUrl}"
+                            <Image Source="{Binding PhotoFileSource}"
                                Aspect="AspectFill"
                                HeightRequest="70"
                                WidthRequest="70" />

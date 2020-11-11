@@ -7,12 +7,16 @@ using recipe_demo.Services;
 using Xamarin.Forms;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.IO;
 
 namespace recipe_demo.ViewModels
 {
     public class RecipeEntryViewModel: BaseViewModel
     {
         public Recipe recipe { get; private set; }
+
+        public Stream PhotoStream { get;  set; }
+        public ImageSource RecipePhotoSource { get;  set; }
 
         public ObservableCollection<Item> Items { get; set; }
         public ObservableCollection<Step> Steps { get; set; }
@@ -27,7 +31,7 @@ namespace recipe_demo.ViewModels
 
         public ICommand SaveCommand { get; private set; }
         public ICommand DeleteCommand { get; private set; }
-
+        public ICommand PickPhotoCommand { get; private set; }
 
         public RecipeEntryViewModel(Recipe recipe)
         {
@@ -48,13 +52,15 @@ namespace recipe_demo.ViewModels
                 RecipeName = recipeEntryModel.RecipeName,
                 Explanation = recipeEntryModel.Explanation,
                 PhotoFilePath = recipeEntryModel.PhotoFilepath,
-                PhotoByte = recipeEntryModel.PhotoByte,
+                PhotoBytes = recipeEntryModel.PhotoBytes,
                 Items = recipeEntryModel.Items,
                 Steps = recipeEntryModel.Steps
             };
 
             Items = recipeEntryModel.Items != null ? new ObservableCollection<Item>(recipe.Items) : new ObservableCollection<Item>();
             Steps = recipeEntryModel.Items != null ? new ObservableCollection<Step>(recipe.Steps) : new ObservableCollection<Step>();
+
+            RecipePhotoSource = recipeEntryModel.PhotoFileSource ;
 
             if (Items.Count == 0)
             {
@@ -71,9 +77,10 @@ namespace recipe_demo.ViewModels
 
             SaveCommand = new Command(async () => await Save());
             DeleteCommand = new Command(async () => await Delete());
-
+            PickPhotoCommand = new Command(async () => await PickPhoto());
         }
 
+        
         public void ItemAdd()
         {
 
@@ -120,6 +127,22 @@ namespace recipe_demo.ViewModels
 
         }
 
+        private async Task PickPhoto()
+        {
+
+            Stream stream = await DependencyService.Get<IPhotoPickerService>().GetImageStreamAsync();
+            if (stream != null)
+            {
+                PhotoStream = stream;
+                recipe.PhotoBytes = ImageConversion.GetImageBytes(PhotoStream);
+
+                RecipePhotoSource = ImageSource.FromStream(() => stream);
+                
+            }
+
+        }
+
+
 
         async Task Save()
         {
@@ -131,6 +154,7 @@ namespace recipe_demo.ViewModels
 
             recipe.Steps = new List<Step>(Steps);
             recipe.Items = new List<Item>(Items);
+
 
             if (recipe.RecipeId == 0)
             {

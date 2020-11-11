@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using recipe_demo.Models;
+using recipe_demo.Services;
 using Xamarin.Forms;
 
 namespace recipe_demo.ViewModels
@@ -12,15 +13,20 @@ namespace recipe_demo.ViewModels
 
         public RecipeEntryModel() { }
 
-        public RecipeEntryModel(Recipe recipe )
+        public RecipeEntryModel(Recipe recipe)
         {
             EntryRecipeId = recipe.RecipeId;
             EntryRecipeName = recipe.RecipeName;
             EntryExplanation = recipe.Explanation;
             EntryPhotoFilePath = recipe.PhotoFilePath;
-            EntryPhotoByte = recipe.PhotoByte;
+            EntryPhotoBytes = recipe.PhotoBytes;
             EntryRecipeItems = recipe.Items;
             EntryRecipeSteps = recipe.Steps;
+
+            if (recipe.PhotoBytes != null)
+            {
+                EntryPhotoFileSource = ImageSource.FromStream(() => ImageConversion.BytesToStream(recipe.PhotoBytes));
+            }
         }
 
         private string EntryRecipeName;
@@ -54,13 +60,25 @@ namespace recipe_demo.ViewModels
             }
         }
 
-        private byte EntryPhotoByte;
-        public byte PhotoByte
+        private byte[] EntryPhotoBytes;
+        public byte[] PhotoBytes
         {
-            get { return EntryPhotoByte; }
+            get { return EntryPhotoBytes; }
             set
             {
-                SetValue(ref EntryPhotoByte, value);
+                SetValue(ref EntryPhotoBytes, value);
+            }
+        }
+
+        private ImageSource EntryPhotoFileSource;
+        public ImageSource PhotoFileSource
+        {
+            get { return EntryPhotoFileSource; }
+            set
+            {
+                EntryPhotoFileSource = ImageSource.FromStream(() => ImageConversion.BytesToStream(EntryPhotoBytes));
+                OnPropertyChanged(nameof(EntryPhotoBytes));
+
             }
         }
 

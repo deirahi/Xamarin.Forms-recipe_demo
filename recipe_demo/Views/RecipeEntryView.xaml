@@ -11,11 +11,13 @@
                        Text="{Binding Path=recipe.RecipeName}" />
                     <Editor Placeholder="Explanation" PlaceholderColor="Olive" HeightRequest="250"
                         Text="{Binding Path=recipe.Explanation}"/>
-                    <Image x:Name="RecipeEyeCatch"
-                       Source="{Binding Path=recipe.PhotoFilePath}"/>
+                    <Image x:Name="RecipeImage"
+                       Source="{Binding RecipePhotoSource}"
+                           HeightRequest="150" WidthRequest="150"
+                            Aspect="AspectFit"/>
                     <Button FontFamily="{DynamicResource MaterialFontFamily}"
                         Text="&#xF087c;" FontSize="Large"
-                            Command="{Binding ItemAddCommand}"
+                            Command="{Binding PickPhotoCommand}"
                             HorizontalOptions="Center" WidthRequest="100" Margin="0,0,0,30" />
                     <Label Text="Recipe Items"/>
                     <StackLayout x:Name="ItemsStack" BindableLayout.ItemsSource="{Binding Items}">
@@ -27,7 +29,7 @@
                                         <ColumnDefinition Width="40"/>
                                     </Grid.ColumnDefinitions>
                                     <Entry Text="{Binding ItemExplanation}" Grid.Column="0" />
-                                    <Button Text="-" Grid.Column="1"
+                                    <Button Text="➖" Grid.Column="1"
                                FontAttributes="Bold" Command="{Binding Source={x:Reference Name=ItemsStack},  Path=BindingContext.ItemDeleteCommand}" CommandParameter="{Binding .}"/>
                                 </Grid>
                             </DataTemplate>
@@ -47,7 +49,7 @@
                                         <ColumnDefinition Width="40"/>
                                     </Grid.ColumnDefinitions>
                                     <Entry Text="{Binding StepDetails}" Grid.Column="0" />
-                                    <Button Text="-" Grid.Column="1"
+                                    <Button Text="➖" Grid.Column="1"
                                FontAttributes="Bold" Command="{Binding Source={x:Reference Name=StepsStack},  Path=BindingContext.StepDeleteCommand}" CommandParameter="{Binding .}"/>
                                 </Grid>
                             </DataTemplate>

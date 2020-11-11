@@ -61,7 +61,7 @@ namespace recipe_demo.ViewModels
             recipeUpdated.RecipeName = recipe.RecipeName;
             recipeUpdated.Explanation = recipe.Explanation;
             recipeUpdated.PhotoFilepath = recipe.PhotoFilePath;
-            recipeUpdated.PhotoByte = recipe.PhotoByte;
+            recipeUpdated.PhotoBytes = recipe.PhotoBytes;
             recipeUpdated.Items = recipe.Items;
             recipeUpdated.Steps = recipe.Steps;
         }
