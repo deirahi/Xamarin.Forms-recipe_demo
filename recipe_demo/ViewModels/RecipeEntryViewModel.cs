@@ -15,8 +15,13 @@ namespace recipe_demo.ViewModels
     {
         public Recipe recipe { get; private set; }
 
-        public Stream PhotoStream { get;  set; }
-        public ImageSource RecipePhotoSource { get;  set; }
+        private Byte[] photoBytes;
+        ImageSource _recipePhotoSource;
+        public ImageSource RecipePhotoSource
+        {
+            get { return _recipePhotoSource; }
+            set { SetValue(ref _recipePhotoSource, value ); }
+        }
 
         public ObservableCollection<Item> Items { get; set; }
         public ObservableCollection<Step> Steps { get; set; }
@@ -61,6 +66,7 @@ namespace recipe_demo.ViewModels
             Steps = recipeEntryModel.Items != null ? new ObservableCollection<Step>(recipe.Steps) : new ObservableCollection<Step>();
 
             RecipePhotoSource = recipeEntryModel.PhotoFileSource ;
+
 
             if (Items.Count == 0)
             {
@@ -133,11 +139,12 @@ namespace recipe_demo.ViewModels
             Stream stream = await DependencyService.Get<IPhotoPickerService>().GetImageStreamAsync();
             if (stream != null)
             {
-                PhotoStream = stream;
-                recipe.PhotoBytes = ImageConversion.GetImageBytes(PhotoStream);
+                photoBytes = ImageConversion.GetImageBytes(stream);
 
-                RecipePhotoSource = ImageSource.FromStream(() => stream);
-                
+                recipe.PhotoBytes = photoBytes;
+
+                RecipePhotoSource = ImageSource.FromStream(() => ImageConversion.BytesToStream(photoBytes));
+
             }
 
         }

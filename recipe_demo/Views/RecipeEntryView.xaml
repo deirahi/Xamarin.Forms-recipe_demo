@@ -13,8 +13,8 @@
                         Text="{Binding Path=recipe.Explanation}"/>
                     <Image x:Name="RecipeImage"
                        Source="{Binding RecipePhotoSource}"
-                           HeightRequest="150" WidthRequest="150"
-                            Aspect="AspectFit"/>
+                           HeightRequest="200"
+                            Aspect="AspectFill"/>
                     <Button FontFamily="{DynamicResource MaterialFontFamily}"
                         Text="&#xF087c;" FontSize="Large"
                             Command="{Binding PickPhotoCommand}"
