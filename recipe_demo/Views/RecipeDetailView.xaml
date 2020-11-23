@@ -23,15 +23,15 @@
                 </CarouselView.ItemTemplate>
             </CarouselView>
             <StackLayout  Orientation="Horizontal" VerticalOptions="End" HorizontalOptions="FillAndExpand">
-                <Button Text="Recipe About" HorizontalOptions="CenterAndExpand"
+                <Button Text="概要" HorizontalOptions="CenterAndExpand"
                         Command="{Binding SelectTabCommand}"
                         CommandParameter="0">
                 </Button>
-                <Button Text="Recipe Items" HorizontalOptions="CenterAndExpand"
+                <Button Text="材料" HorizontalOptions="CenterAndExpand"
                         Command="{Binding SelectTabCommand}"
                         CommandParameter="1">
                 </Button>
-                <Button Text="Recipe Steps" HorizontalOptions="CenterAndExpand"
+                <Button Text="手順" HorizontalOptions="CenterAndExpand"
                         Command="{Binding SelectTabCommand}"
                         CommandParameter="2">
                 </Button>

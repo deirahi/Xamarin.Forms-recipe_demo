@@ -6,7 +6,7 @@
             <Image x:Name="recipeImage"                                
                    HeightRequest="300"
                    Aspect="AspectFill"/>
-            <Label Text="Explanation" TextColor="Olive" FontSize="Subtitle" />
+            <Label Text="レシピの説明" TextColor="Olive" FontSize="Subtitle" />
             <Label x:Name="recipeExplanation"  FontSize="Body"/>
         </StackLayout>
     </ContentView.Content>

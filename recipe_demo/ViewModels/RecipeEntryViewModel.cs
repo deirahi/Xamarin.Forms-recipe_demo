@@ -8,6 +8,8 @@ using Xamarin.Forms;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using System.IO;
+using System.Drawing;
+using Xamarin.Forms.Shapes;
 
 namespace recipe_demo.ViewModels
 {
@@ -131,6 +133,17 @@ namespace recipe_demo.ViewModels
             if (stream != null)
             {
                 recipe.PhotoBytes = ImageConversion.GetImageBytes(stream);
+                //上限サイズを超えていたら、上限を下回る大きさに縮小する
+                if(recipe.PhotoBytes.Length > ImageConversion.UpperLimitBytes)
+                {
+                    //500kbとなるような倍率を計算 TODO:必ずしも500kb以下にならないのでリサイズ方法を検討すること
+                    float scale = (float) ImageConversion.UpperLimitBytes / (float) recipe.PhotoBytes.Length;
+
+                    // サイズ変更した画像を作成する
+                    var resizeImageBytes = DependencyService.Get<IImageResize>().ResizeImage(recipe.PhotoBytes, scale, scale);
+                    recipe.PhotoBytes = resizeImageBytes;
+                }
+
                 //画面表示用にストリームをつくる　こうしないと画面に画像が表示されなかった
                 RecipePhotoSource = ImageSource.FromStream(() => ImageConversion.BytesToStream(recipe.PhotoBytes));
 
@@ -144,7 +157,7 @@ namespace recipe_demo.ViewModels
         {
             if (String.IsNullOrEmpty(recipe.RecipeName) )
             {
-                await pageService.DisplayAlert("Error", "Please enter the name.", "OK");
+                await pageService.DisplayAlert("Error", "レシピ名を入力してください。", "OK");
                 return;
             }
 
