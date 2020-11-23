@@ -1,22 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using recipe_demo.Services;
+using recipe_demo.ViewModels;
 using Xamarin.Forms;
 
 namespace recipe_demo.Views
 {
     public partial class RecipeDetailView : ContentPage
     {
-        private object recipe;
-
-        public RecipeDetailView()
+        public RecipeDetailView(RecipeEntryModel recipeEntry)
         {
             InitializeComponent();
-        }
-
-        public RecipeDetailView(object recipe)
-        {
-            this.recipe = recipe;
+            var pageservice = new PageService();
+            BindingContext = new RecipeDetailViewModel(recipeEntry, pageservice);
         }
     }
 }

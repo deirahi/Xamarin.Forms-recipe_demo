@@ -1,8 +1,41 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" x:Class="recipe_demo.Views.RecipeDetailView">
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms" xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Name="RecipeDetailPage"
+             x:Class="recipe_demo.Views.RecipeDetailView" NavigationPage.HasNavigationBar="False">
     <ContentPage.Content>
-        <CarouselView>
-            
-        </CarouselView>
+        <StackLayout>
+            <StackLayout >
+                <Button x:Name="RecipeEditButton"
+                    Command="{Binding RecipeEditCommand}"
+                 Text="✒︎" FontSize="Large" BackgroundColor="Orange"
+                        BorderRadius="35"
+                        WidthRequest="55" HeightRequest="45"
+                    BorderColor="Black" BorderWidth="1" FontAttributes="Bold" HorizontalOptions="End"/>
+            </StackLayout>
+            <CarouselView x:Name="carouselView"
+                          ItemsSource="{Binding ContentViews}"
+                          Position="{Binding PositionSelected}"
+                          >
+                <CarouselView.ItemTemplate>
+                    <DataTemplate>
+                        <ContentView Content="{Binding Content}"/>
+                    </DataTemplate>
+                </CarouselView.ItemTemplate>
+            </CarouselView>
+            <StackLayout  Orientation="Horizontal" VerticalOptions="End" HorizontalOptions="FillAndExpand">
+                <Button Text="Recipe About" HorizontalOptions="CenterAndExpand"
+                        Command="{Binding SelectTabCommand}"
+                        CommandParameter="0">
+                </Button>
+                <Button Text="Recipe Items" HorizontalOptions="CenterAndExpand"
+                        Command="{Binding SelectTabCommand}"
+                        CommandParameter="1">
+                </Button>
+                <Button Text="Recipe Steps" HorizontalOptions="CenterAndExpand"
+                        Command="{Binding SelectTabCommand}"
+                        CommandParameter="2">
+                </Button>
+            </StackLayout>
+        </StackLayout>
     </ContentPage.Content>
 </ContentPage>

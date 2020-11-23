@@ -13,9 +13,9 @@ namespace recipe_demo.ViewModels
 {
     public class RecipeEntryViewModel: BaseViewModel
     {
+        //DB保存、画面表示用
         public Recipe recipe { get; private set; }
 
-        private Byte[] photoBytes;
         ImageSource _recipePhotoSource;
         public ImageSource RecipePhotoSource
         {
@@ -23,20 +23,25 @@ namespace recipe_demo.ViewModels
             set { SetValue(ref _recipePhotoSource, value ); }
         }
 
+        //参照渡しでデータの削除をするためのポインタのような役割
+        private RecipeEntryModel ThisRecipeEntry;
+
+
         public ObservableCollection<Item> Items { get; set; }
         public ObservableCollection<Step> Steps { get; set; }
 
         private readonly IDbService dbService;
         private readonly IPageService pageService;
 
-        public ICommand ItemAddCommand { get; private set; }
-        public ICommand ItemDeleteCommand { get; private set; }
-        public ICommand StepAddCommand { get; private set; }
-        public ICommand StepDeleteCommand { get; private set; }
+        public ICommand ItemAddCommand { get => new Command(() => ItemAdd()); }
+        public ICommand ItemDeleteCommand { get => new Command(i => ItemDelete(i)); }
+        public ICommand StepAddCommand { get => new Command(() => StepAdd());}
+        public ICommand StepDeleteCommand { get => new Command(s => StepDelete(s)); }
 
-        public ICommand SaveCommand { get; private set; }
-        public ICommand DeleteCommand { get; private set; }
-        public ICommand PickPhotoCommand { get; private set; }
+        public ICommand SaveCommand { get => new Command(async () => await Save()); }
+        public ICommand DeleteCommand { get => new Command(async () => await Delete()); }
+        public ICommand PickPhotoCommand { get=> new Command(async () => await PickPhoto()); }
+
 
         public RecipeEntryViewModel(Recipe recipe)
         {
@@ -46,8 +51,11 @@ namespace recipe_demo.ViewModels
         public RecipeEntryViewModel(RecipeEntryModel recipeEntryModel, DBService dbService, PageService pageservice)
         {
             if (recipeEntryModel == null)
+            {
                 throw new ArgumentNullException(nameof(recipeEntryModel));
+            }
 
+            ThisRecipeEntry = recipeEntryModel;
             this.dbService = dbService;
            this.pageService = pageservice;
 
@@ -56,37 +64,18 @@ namespace recipe_demo.ViewModels
                 RecipeId = recipeEntryModel.EntryRecipeId,
                 RecipeName = recipeEntryModel.RecipeName,
                 Explanation = recipeEntryModel.Explanation,
-                PhotoFilePath = recipeEntryModel.PhotoFilepath,
                 PhotoBytes = recipeEntryModel.PhotoBytes,
                 Items = recipeEntryModel.Items,
                 Steps = recipeEntryModel.Steps
             };
 
             Items = recipeEntryModel.Items != null ? new ObservableCollection<Item>(recipe.Items) : new ObservableCollection<Item>();
-            Steps = recipeEntryModel.Items != null ? new ObservableCollection<Step>(recipe.Steps) : new ObservableCollection<Step>();
+            Steps = recipeEntryModel.Steps != null ? new ObservableCollection<Step>(recipe.Steps) : new ObservableCollection<Step>();
 
             RecipePhotoSource = recipeEntryModel.PhotoFileSource ;
-
-
-            if (Items.Count == 0)
-            {
-                Items.Add(new Item());
-            }
-            if (Steps.Count == 0)
-            {
-            }
-            ItemAddCommand = new Command(() => ItemAdd());
-            ItemDeleteCommand = new Command(i => ItemDelete(i));
-
-            StepAddCommand = new Command(() => StepAdd());
-            StepDeleteCommand = new Command( s => StepDelete(s));
-
-            SaveCommand = new Command(async () => await Save());
-            DeleteCommand = new Command(async () => await Delete());
-            PickPhotoCommand = new Command(async () => await PickPhoto());
         }
 
-        
+        //画面の材料欄の増減
         public void ItemAdd()
         {
 
@@ -99,6 +88,7 @@ namespace recipe_demo.ViewModels
             Items.Remove(item);
         }
 
+        //画面の手順欄の増減
         public void StepAdd()
         {
             Steps.Add(new Step() { StepOrder = Steps.Count});
@@ -115,35 +105,34 @@ namespace recipe_demo.ViewModels
         {
             if (recipe.RecipeId == 0)
             {
-                if (await pageService.DisplayAlert("Warning", $"Are you sure you want to throw away this new recipe ?", "Yes", "No"))
+                if (await pageService.DisplayAlert("警告", $"新しいレシピを登録せずに破棄しますが、よろしいですか?", "はい", "いいえ"))
                 {
                     await pageService.PopAsync();
                 }
                 return;
             }
 
-            if (await pageService.DisplayAlert("Warning", $"Are you sure you want to delete {recipe.RecipeName}?", "Yes", "No"))
+            if (await pageService.DisplayAlert("警告", $"本当に「{recipe.RecipeName}」を削除しますか?", "はい", "いいえ"))
             {
 
                 await dbService.DeleteRecipe(recipe);
-                MessagingCenter.Send(this, DbChangeEventMassages.RecipeDeleted, recipe);
+                MessagingCenter.Send(this, DbChangeEventMassages.RecipeDeleted, ThisRecipeEntry);
 
                 await pageService.PopAsync();
             }
 
         }
 
+        //画像を取得しリサイズして表示・ローカル変数に格納
         private async Task PickPhoto()
         {
 
             Stream stream = await DependencyService.Get<IPhotoPickerService>().GetImageStreamAsync();
             if (stream != null)
             {
-                photoBytes = ImageConversion.GetImageBytes(stream);
-
-                recipe.PhotoBytes = photoBytes;
-
-                RecipePhotoSource = ImageSource.FromStream(() => ImageConversion.BytesToStream(photoBytes));
+                recipe.PhotoBytes = ImageConversion.GetImageBytes(stream);
+                //画面表示用にストリームをつくる　こうしないと画面に画像が表示されなかった
+                RecipePhotoSource = ImageSource.FromStream(() => ImageConversion.BytesToStream(recipe.PhotoBytes));
 
             }
 

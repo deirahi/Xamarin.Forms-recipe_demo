@@ -20,10 +20,7 @@ namespace recipe_demo.Models
         [MaxLength(255)]
         public string  SetDate { get; set; }
 
-        //todo: 写真はあとで別のクラスに分けて、たくさん追加できるようにする。ひとまずは１つだけ。
-        [MaxLength(255)]
-        public string PhotoFilePath { get; set; }
-
+        //todo: 写真はひとまずは１つだけ。追加するか検討
         public byte[] PhotoBytes { get; set; }
 
         // CascadeOperationsで関連データも同時に操作するか、どの操作を同時に操作するかを決められる

@@ -10,60 +10,59 @@ using System.Windows.Input;
 
 namespace recipe_demo.ViewModels
 {
-    public class MainViewModel:BaseViewModel
+    public class MainViewModel : BaseViewModel
     {
-        private RecipeDetailViewModel vmSelectedRecipe;
-        private IDbService vmDbService;
-        private IPageService vmPageService;
+        private IDbService iDbService;
+        private IPageService iPageService;
 
-        private bool vmIsDataLoaded;
+        private bool isDataLoaded;
 
-        //todo:ここのmodelがEntryでいいのかは調査・検証が必要
         public ObservableCollection<RecipeEntryModel> Recipes { get; private set; }
-         = new ObservableCollection<RecipeEntryModel>();
 
-        public RecipeDetailViewModel SelectedRecipe
+
+        private RecipeEntryModel selectedRecipe;
+        public RecipeEntryModel SelectedRecipe
         {
-            get { return vmSelectedRecipe; }
-            set { SetValue(ref vmSelectedRecipe, value); }
+            get { return selectedRecipe; }
+            set { SetValue(ref selectedRecipe, value, nameof(SelectedRecipe)); }
         }
 
-        public ICommand LoadDataCommand { get; private set; }
-        public ICommand SelectRecipeCommand { get; private set; }
-        public ICommand AddRecipeCommand { get; private set; }
-        //todo: DeleteはとりあえずはMainViewからではなくDetailから行う予定　なので、コマンドだけ置いておく
-        public ICommand DeleteRecipeCommand { get; private set; }
+        public ICommand LoadDataCommand { get => new Command(async () => await LoadData()); }
+        public ICommand SelectRecipeCommand { get => new Command<RecipeEntryModel>(async r => await SelectData(r)); }
+        public ICommand AddRecipeCommand { get => new Command(async () => await AddRecipe()); }
 
+        //コンストラクタ
         public MainViewModel(IDbService dbService, IPageService pageService)
         {
-            vmDbService = dbService;
-            vmPageService = pageService;
+            Recipes = new ObservableCollection<RecipeEntryModel>();
+            iDbService = dbService;
+            iPageService = pageService;
+            SelectedRecipe = null;
 
-            LoadDataCommand = new Command(async () => await LoadData());
-            AddRecipeCommand = new Command(async () => await AddRecipe());
-            SelectRecipeCommand = new Command<RecipeDetailViewModel>(async r => await SelectData(r));
-
+            //編集画面での変更を取得し、画面に反映する処理を呼ぶ
             MessagingCenter.Subscribe<RecipeEntryViewModel, Recipe>
                 (this, DbChangeEventMassages.RecipeAdded, OnRecipeAdded);
 
             MessagingCenter.Subscribe<RecipeEntryViewModel, Recipe>
                 (this, DbChangeEventMassages.RecipeUpdated, OnRecipeUpdated);
-            //todo: DeleteのSubscribeが必要かを検証すること
-            MessagingCenter.Subscribe<RecipeEntryViewModel, Recipe>
+
+            MessagingCenter.Subscribe<RecipeEntryViewModel, RecipeEntryModel>
                 (this, DbChangeEventMassages.RecipeDeleted, OnRecipeRemoved);
         }
 
         private void OnRecipeUpdated(RecipeEntryViewModel source, Recipe recipe)
         {
+
             var recipeUpdated = Recipes.Single(r => r.EntryRecipeId == recipe.RecipeId);
 
             recipeUpdated.EntryRecipeId = recipe.RecipeId;
             recipeUpdated.RecipeName = recipe.RecipeName;
             recipeUpdated.Explanation = recipe.Explanation;
-            recipeUpdated.PhotoFilepath = recipe.PhotoFilePath;
             recipeUpdated.PhotoBytes = recipe.PhotoBytes;
+            recipeUpdated.PhotoFileSource = ImageSource.FromStream(() => ImageConversion.BytesToStream(recipe.PhotoBytes)); ;
             recipeUpdated.Items = recipe.Items;
             recipeUpdated.Steps = recipe.Steps;
+
         }
 
         private void OnRecipeAdded(RecipeEntryViewModel source, Recipe recipe)
@@ -71,33 +70,39 @@ namespace recipe_demo.ViewModels
             Recipes.Add(new RecipeEntryModel(recipe));
         }
 
-        private void OnRecipeRemoved(RecipeEntryViewModel source, Recipe recipe)
+        private void OnRecipeRemoved(RecipeEntryViewModel source, RecipeEntryModel recipeEntry)
         {
-            Recipes.Remove(new RecipeEntryModel(recipe));
+
+            Recipes.Remove(recipeEntry);
         }
 
         private async Task AddRecipe()
         {
             var newRecipe = new Recipe();
-            await vmPageService.PushAsync(new RecipeEntryView(new RecipeEntryModel(newRecipe)));
+            await iPageService.PushAsync(new RecipeEntryView(new RecipeEntryModel(newRecipe)));
         }
 
-        private async Task SelectData(object recipe)
+        private async Task SelectData(RecipeEntryModel selectedRecipeEntry)
         {
-            if(recipe == null)
+            if (selectedRecipeEntry == null)
+            {
                 return;
-            vmSelectedRecipe = null;
-            await vmPageService.PushAsync(new RecipeDetailView(recipe));
+            }
+            SelectedRecipe = null;
+
+            await iPageService.PushAsync(new RecipeDetailView(selectedRecipeEntry));
         }
 
         private async Task LoadData()
         {
-            if (vmIsDataLoaded)
+            if (isDataLoaded)
+            {
                 return;
+            }
 
-            vmIsDataLoaded = true;
-            var recipes = await vmDbService.GetRecipesAsync();
-            foreach ( var recipe in recipes)
+            isDataLoaded = true;
+            var recipes = await iDbService.GetRecipesAsync();
+            foreach (var recipe in recipes)
             {
                 Recipes.Add(new RecipeEntryModel(recipe));
             }

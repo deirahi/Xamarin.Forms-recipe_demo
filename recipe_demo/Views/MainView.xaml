@@ -13,7 +13,8 @@
                         Grid.Row="0"
                         SelectionMode="Single"
                         SelectedItem="{Binding SelectedRecipe}"
-                        SelectionChangedCommand="{Binding SelectRecipeCommand}" >
+                        SelectionChangedCommand="{Binding SelectRecipeCommand}"
+                        SelectionChangedCommandParameter="{Binding SelectedRecipe}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Grid Padding="10">

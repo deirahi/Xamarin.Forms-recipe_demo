@@ -16,5 +16,8 @@ namespace recipe_demo.Models
 
         [ForeignKey(typeof(Recipe))]
         public int RecipeId { get; set; }
+
+        [ManyToOne]
+        public Recipe Recipe { get; set; }
     }
 }

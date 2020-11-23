@@ -22,7 +22,7 @@ namespace recipe_demo.Services
 
         public async Task<IEnumerable<Recipe>> GetRecipesAsync()
         {
-            return await dbConnection.Table<Recipe>().ToListAsync();
+            return await dbConnection.GetAllWithChildrenAsync<Recipe>();
         }
 
         public async Task<Recipe> GetRecipe(int recipeId)
@@ -37,13 +37,13 @@ namespace recipe_demo.Services
 
         public async Task UpdateRecipe(Recipe recipe)
         {
-            await dbConnection.UpdateWithChildrenAsync(recipe);
+            //UpdateWithChildrenの方だと、ItemsとStepsがうまく更新されなかった
+            await dbConnection.InsertOrReplaceWithChildrenAsync(recipe);
         }
 
-        //お試しで、削除だけrecursivelyをtrueにしてみた
         public async Task DeleteRecipe(Recipe recipe)
         {
-            await dbConnection.DeleteAsync(recipe, true);
+            await dbConnection.DeleteAsync(recipe);
         }
     }
 }

@@ -18,7 +18,6 @@ namespace recipe_demo.ViewModels
             EntryRecipeId = recipe.RecipeId;
             EntryRecipeName = recipe.RecipeName;
             EntryExplanation = recipe.Explanation;
-            EntryPhotoFilePath = recipe.PhotoFilePath;
             EntryPhotoBytes = recipe.PhotoBytes;
             EntryRecipeItems = recipe.Items;
             EntryRecipeSteps = recipe.Steps;
@@ -35,7 +34,7 @@ namespace recipe_demo.ViewModels
             get { return EntryRecipeName; }
             set
             {
-                SetValue(ref EntryRecipeName, value);
+                SetValue(ref EntryRecipeName, value, nameof(RecipeName));
             }
         }
 
@@ -45,18 +44,7 @@ namespace recipe_demo.ViewModels
             get { return EntryExplanation; }
             set
             {
-                SetValue(ref EntryExplanation, value);
-            }
-        }
-
-        private string EntryPhotoFilePath;
-        public string PhotoFilepath
-        {
-            get { return EntryPhotoFilePath; }
-            set
-            {
-                SetValue(ref EntryPhotoFilePath, value);
-                OnPropertyChanged(nameof(EntryPhotoFilePath));
+                SetValue(ref EntryExplanation, value,nameof(Explanation));
             }
         }
 
@@ -66,10 +54,11 @@ namespace recipe_demo.ViewModels
             get { return EntryPhotoBytes; }
             set
             {
-                SetValue(ref EntryPhotoBytes, value);
+                SetValue(ref EntryPhotoBytes, value, nameof(PhotoBytes));
             }
         }
 
+        //画像の画面表示用
         private ImageSource EntryPhotoFileSource;
         public ImageSource PhotoFileSource
         {
@@ -77,7 +66,7 @@ namespace recipe_demo.ViewModels
             set
             {
                 EntryPhotoFileSource = ImageSource.FromStream(() => ImageConversion.BytesToStream(EntryPhotoBytes));
-                OnPropertyChanged(nameof(EntryPhotoBytes));
+                OnPropertyChanged(nameof(PhotoFileSource));
 
             }
         }
@@ -88,7 +77,7 @@ namespace recipe_demo.ViewModels
             get { return EntryRecipeItems; }
             set
             {
-                SetValue(ref EntryRecipeItems, value);
+                SetValue(ref EntryRecipeItems, value,nameof(Items));
             }
         }
 
@@ -98,7 +87,7 @@ namespace recipe_demo.ViewModels
             get { return EntryRecipeSteps; }
             set
             {
-                SetValue(ref EntryRecipeSteps, value);
+                SetValue(ref EntryRecipeSteps, value, nameof(Items));
             }
         }
 
