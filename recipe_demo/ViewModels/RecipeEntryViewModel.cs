@@ -93,7 +93,7 @@ namespace recipe_demo.ViewModels
         //画面の手順欄の増減
         public void StepAdd()
         {
-            Steps.Add(new Step() { StepOrder = Steps.Count});
+            Steps.Add(new Step());
         }
 
         public void StepDelete( object sender)
@@ -134,10 +134,10 @@ namespace recipe_demo.ViewModels
             {
                 recipe.PhotoBytes = ImageConversion.GetImageBytes(stream);
                 //上限サイズを超えていたら、上限を下回る大きさに縮小する
-                if(recipe.PhotoBytes.Length > ImageConversion.UpperLimitBytes)
+                if(recipe.PhotoBytes.Length > ImageConversion.UpperLimitImageBytes)
                 {
                     //500kbとなるような倍率を計算 TODO:必ずしも500kb以下にならないのでリサイズ方法を検討すること
-                    float scale = (float) ImageConversion.UpperLimitBytes / (float) recipe.PhotoBytes.Length;
+                    float scale = (float) ImageConversion.UpperLimitImageBytes / (float) recipe.PhotoBytes.Length;
 
                     // サイズ変更した画像を作成する
                     var resizeImageBytes = DependencyService.Get<IImageResize>().ResizeImage(recipe.PhotoBytes, scale, scale);
@@ -161,8 +161,8 @@ namespace recipe_demo.ViewModels
                 return;
             }
 
-            recipe.Steps = new List<Step>(Steps);
             recipe.Items = new List<Item>(Items);
+            recipe.Steps = new List<Step>(Steps);
 
 
             if (recipe.RecipeId == 0)

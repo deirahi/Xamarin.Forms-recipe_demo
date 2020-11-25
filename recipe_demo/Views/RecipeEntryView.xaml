@@ -7,9 +7,10 @@
             <ScrollView Grid.Row="0">
                 <StackLayout>
                     <Label Text="レシピ概要" FontSize="Title"/>
-                    <Entry Placeholder="レシピ名" PlaceholderColor="Olive"
+                    <Entry Placeholder="レシピ名（半角255文字以内）" PlaceholderColor="Olive" MaxLength="255"
                        Text="{Binding Path=recipe.RecipeName}" />
-                    <Editor Placeholder="レシピの説明" PlaceholderColor="Olive" HeightRequest="250"
+                    <Editor Placeholder="レシピの説明（半角1,000文字以内）" PlaceholderColor="Olive" MaxLength="1000"
+                            HeightRequest="250" 
                         Text="{Binding Path=recipe.Explanation}"/>
                     <Image x:Name="RecipeImage"
                        Source="{Binding RecipePhotoSource}"
@@ -28,7 +29,9 @@
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="40"/>
                                     </Grid.ColumnDefinitions>
-                                    <Entry Text="{Binding ItemExplanation}" Grid.Column="0" />
+                                    <Entry Text="{Binding ItemExplanation}" Grid.Column="0"
+                                           Placeholder="材料（半角255文字以内）"
+                                           PlaceholderColor="Olive" MaxLength="255"/>
                                     <Button Text="➖" Grid.Column="1"
                                FontAttributes="Bold" Command="{Binding Source={x:Reference Name=ItemsStack},  Path=BindingContext.ItemDeleteCommand}" CommandParameter="{Binding .}"/>
                                 </Grid>
@@ -48,7 +51,9 @@
                                         <ColumnDefinition Width="*"/>
                                         <ColumnDefinition Width="40"/>
                                     </Grid.ColumnDefinitions>
-                                    <Entry Text="{Binding StepDetails}" Grid.Column="0" />
+                                    <Entry Text="{Binding StepDetails}" Grid.Column="0"
+                                           Placeholder="手順（半角512文字以内）"
+                                           PlaceholderColor="Olive" MaxLength="255"/>
                                     <Button Text="➖" Grid.Column="1"
                                FontAttributes="Bold" Command="{Binding Source={x:Reference Name=StepsStack},  Path=BindingContext.StepDeleteCommand}" CommandParameter="{Binding .}"/>
                                 </Grid>

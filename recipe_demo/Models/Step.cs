@@ -11,7 +11,6 @@ namespace recipe_demo.Models
         [PrimaryKey , AutoIncrement]
         public int StepId { get; set; }
 
-        public int StepOrder { get; set; }
         [MaxLength(512)]
         public string StepDetails { get; set; }
 
