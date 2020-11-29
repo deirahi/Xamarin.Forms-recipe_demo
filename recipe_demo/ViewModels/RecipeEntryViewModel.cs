@@ -134,10 +134,10 @@ namespace recipe_demo.ViewModels
             {
                 recipe.PhotoBytes = ImageConversion.GetImageBytes(stream);
                 //上限サイズを超えていたら、上限を下回る大きさに縮小する
-                if(recipe.PhotoBytes.Length > ImageConversion.UpperLimitImageBytes)
+                if(recipe.PhotoBytes.Length > ImageConversion.UPPER_LIMIT_IMAGE_BYTES)
                 {
-                    //500kbとなるような倍率を計算 TODO:必ずしも500kb以下にならないのでリサイズ方法を検討すること
-                    float scale = (float) ImageConversion.UpperLimitImageBytes / (float) recipe.PhotoBytes.Length;
+                    //500kbとなるような倍率を計算 TODO:必ずしも上限以下にならないのでリサイズ方法を検討すること
+                    float scale = (float) ImageConversion.UPPER_LIMIT_IMAGE_BYTES / (float) recipe.PhotoBytes.Length;
 
                     // サイズ変更した画像を作成する
                     var resizeImageBytes = DependencyService.Get<IImageResize>().ResizeImage(recipe.PhotoBytes, scale, scale);

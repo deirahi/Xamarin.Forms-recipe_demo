@@ -10,6 +10,9 @@ namespace recipe_demo.Services
 {
     public class DBService:IDbService
     {
+        //各OSのDBConnectionで利用
+        public const string RECIPE_DB_FILE_NAME = "RecipeDb.db3";
+
         private SQLiteAsyncConnection dbConnection;
 
         public DBService(IDbConnection db)

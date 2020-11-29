@@ -54,4 +54,6 @@ Global
 		{2EAA2433-D123-44FA-8BEC-294263F3E7D0}.Release|iPhone.ActiveCfg = Release|Any CPU
 		{2EAA2433-D123-44FA-8BEC-294263F3E7D0}.Release|iPhone.Build.0 = Release|Any CPU
 	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+	EndGlobalSection
 EndGlobal

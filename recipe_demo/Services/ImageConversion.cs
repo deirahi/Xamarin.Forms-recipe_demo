@@ -6,7 +6,7 @@ namespace recipe_demo.Services
     public static class ImageConversion
     {
         //画像のDB保存時の上限サイズ（バイト） TODO:この数値でいいのか、レシピを多数登録して確認・検討する
-        public const int UpperLimitImageBytes = 512000;
+        public const int UPPER_LIMIT_IMAGE_BYTES = 512000;
 
         public static byte[] GetImageBytes(Stream stream)
         {

@@ -14,7 +14,7 @@ namespace recipe_demo.iOS.Services
         public SQLiteAsyncConnection GetConnection()
         {
             var folderPath = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-            var path = Path.Combine(folderPath, "RecipeDb.db3");
+            var path = Path.Combine(folderPath, DBService.RECIPE_DB_FILE_NAME);
 
             return new SQLiteAsyncConnection(path);
         }
